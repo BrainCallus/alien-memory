@@ -1,8 +1,10 @@
 import sbt.Keys.scalacOptions
 
 import scala.collection.Seq
+import pl.project13.scala.sbt.JmhPlugin
 
-val scala213Version = "2.13.12"
+
+val scala213Version = "2.13.14"
 
 ThisBuild / organization := "com.yandex.classifieds"
 ThisBuild / version      := "0.1.0"
@@ -30,7 +32,7 @@ ThisBuild / scmInfo :=
   )
 ThisBuild / publishTo := Some(Opts.resolver.sonatypeStaging)
 
-lazy val zioVersion         = "2.0.14"
+lazy val zioVersion         = "2.1.6"
 lazy val supertaggedVersion = "2.0-RC2"
 
 lazy val zioTest      = "dev.zio"       %% "zio-test"      % zioVersion % Test
@@ -64,6 +66,20 @@ lazy val alienMemory = (project in file("memory")).settings(
   memoryDependencies,
 )
 
+lazy val alienMemory0 = (project in file("memory_v0")).settings(
+  name         := "alien-memory-0",
+  scalaVersion := scala213Version,
+  scalacOptions ++= compilerOptions,
+  memoryDependencies,
+)
+
+lazy val alienMemory3 = (project in file("memory_v3")).settings(
+  name         := "alien-memory-3",
+  scalaVersion := scala213Version,
+  scalacOptions ++= compilerOptions,
+  memoryDependencies,
+)
+
 lazy val alienExamples = (project in file("examples"))
   .settings(
     name         := "alien-examples",
@@ -74,8 +90,29 @@ lazy val alienExamples = (project in file("examples"))
   )
   .dependsOn(alienMemory)
 
+lazy val alienJmh = (project in file("alienJmh")).settings(
+  name := "alienJmh", libraryDependencies ++= Seq(supertagged, scalaReflect, zioTest, zioTestSbt),
+  scalaVersion := scala213Version,
+  scalacOptions ++= compilerOptions,
+  publish / skip := true,
+  doc / skip     := true,
+  Jmh / javaOptions += s"-Djava.library.path=$asyncHome/lib",
+  Jmh / sourceDirectory :=
+    (Test / sourceDirectory).value,
+  Jmh / classDirectory :=
+    (Test / classDirectory).value,
+  Jmh / dependencyClasspath :=
+    (Test / dependencyClasspath).value,
+  Jmh / compile :=
+    (Jmh / compile).dependsOn(Test / compile).value,
+  Jmh / run :=
+    (Jmh / run).dependsOn(Jmh / compile).evaluated,
+)
+.dependsOn(alienMemory,alienMemory0, alienMemory3)
+ .enablePlugins(JmhPlugin)
+
 lazy val root = (project in file("."))
-  .aggregate(alienMemory, alienExamples)
+  .aggregate(alienMemory, alienExamples, alienJmh,alienMemory0, alienMemory3)
   .settings(publish / skip := true, doc / skip := true)
 
 
@@ -84,3 +121,14 @@ lazy val boiler = taskKey[Unit]("Generates boilerplate")
 boiler := {
   HandleBoiler.generate("memory/")
 }
+
+lazy val asyncHome = sys
+  .env
+  .getOrElse(
+    "ASYNC_PROFILER_HOME",
+    "ASYNC_PROFILER_HOME_env_not_specified",
+    //    throw new RuntimeException(
+    //      "Please setup 'ASYNC_PROFILER_HOME' env as described in 'benchmarks.md'",
+    //    )
+  )
+

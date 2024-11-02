@@ -2,12 +2,12 @@ import org.scalafmt.interfaces.Scalafmt
 
 import java.io.{File, PrintWriter}
 import scala.collection.immutable.HashMap
-import java.nio.file.Paths
+import java.nio.file.{Path, Paths}
 
 object HandleBoiler {
 
-  val scalafmt = Scalafmt.create(this.getClass.getClassLoader)
-  val config   = Paths.get(".scalafmt.conf")
+  val scalafmt: Scalafmt = Scalafmt.create(this.getClass.getClassLoader)
+  val config: Path       = Paths.get(".scalafmt.conf")
 
   def format(source: String): String = {
     scalafmt.format(config, Paths.get("Generated.scala"), source)
@@ -51,7 +51,7 @@ object HandleBoiler {
     result
   }
 
-  val typeSize = HashMap(
+  val typeSize: HashMap[String, String] = HashMap(
     "Int"     -> "2",
     "Long"    -> "3",
     "Short"   -> "1",
@@ -62,18 +62,21 @@ object HandleBoiler {
     "Char"    -> "1",
   )
 
-  val vhName = (x: String) => x.toLowerCase() + "Vh"
+  val vhName: String => String = (x: String) => x.toLowerCase() + "Vh"
+
+  val valueLayoutName: String => String =
+    (x: String) => "JAVA_" + x.toUpperCase()
 
   def getMethodImpl(name: String)(typ: String, i: Int): String = {
-    s"${vhName(typ)}.$name(mem.asJava, (${generateOffsetCalculation(i)}) >> ${typeSize(typ)})"
+    s"${vhName(typ)}.$name(mem.asJava, ${generateOffsetCalculation(i)}, 0L)"
   }
 
   def setMethodImpl(name: String)(typ: String, i: Int): String = {
-    s"${vhName(typ)}.$name(mem.asJava, (${generateOffsetCalculation(i)}) >> ${typeSize(typ)}, value)"
+    s"${vhName(typ)}.$name(mem.asJava, ${generateOffsetCalculation(i)}, 0L, value)"
   }
 
   def casMethodImpl(name: String)(typ: String, i: Int): String =
-    s"${vhName(typ)}.$name(mem.asJava, (${generateOffsetCalculation(i)}) >> ${typeSize(typ)}, expectedValue, newValue)"
+    s"${vhName(typ)}.$name(mem.asJava, ${generateOffsetCalculation(i)}, 0L, expectedValue, newValue)"
 
   val methods = List(
     ("get", (getMethod(withRegion = true) _, getMethodImpl _)),
@@ -135,7 +138,7 @@ case class MemoryPtr$i[L <: Layout, @specialized(AllNumeric) T]private[alien](${
 
   def impl(tpe: String, i: Int): String =
     format(
-      s"""  implicit final class ${tpe}${i}Ops[L <: Layout](protected val vh: MemoryPtr$i[L, $tpe]) extends AnyVal {
+      s"""  implicit final class $tpe${i}Ops[L <: Layout](protected val vh: MemoryPtr$i[L, $tpe]) extends AnyVal {
 
 
 
@@ -167,8 +170,9 @@ ${methods.flatMap { case (names, (method, impl)) =>
      """.stripMargin,
     )
 
-  def memoryHandle =
-    format(s"""package alien.memory.handle
+  def memoryHandle: String =
+    format(
+      s"""package alien.memory.handle
 
 import alien.memory.{Global, Layout, Memory, Region}
 import jdk.internal.vm.annotation.IntrinsicCandidate
@@ -212,21 +216,38 @@ object MemoryHandle {
 
     trait MemoryHandleSyntax {
     ${{
-        for {
-          tpe <- List("Byte", "Short", "Char", "Int", "Long", "Float", "Double")
-          i   <- 0 to 6
-        } yield implSyntax(tpe, i)
-      }.mkString("\n")}
+          for {
+            tpe <- List(
+              "Byte",
+              "Short",
+              "Char",
+              "Int",
+              "Long",
+              "Float",
+              "Double",
+            )
+            i <- 0 to 6
+          } yield implSyntax(tpe, i)
+        }.mkString("\n")}
 
     }
 ${{
-        for {
-          tpe <- List("Byte", "Short", "Char", "Int", "Long", "Float", "Double")
-          i   <- 0 to 6
-        } yield impl(tpe, i)
-      }.mkString("\n")}
+          for {
+            tpe <- List(
+              "Byte",
+              "Short",
+              "Char",
+              "Int",
+              "Long",
+              "Float",
+              "Double",
+            )
+            i <- 0 to 6
+          } yield impl(tpe, i)
+        }.mkString("\n")}
 }
-""")
+""",
+    )
 
   def writeToFile(filename: String, contents: String): Unit = {
     val writer = new PrintWriter(new File(filename))

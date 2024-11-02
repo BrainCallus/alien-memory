@@ -9,35 +9,59 @@ import java.lang.foreign.{MemoryLayout, ValueLayout}
 object MemoryHandle {
 
   val byteVh = MemoryLayout
-    .sequenceLayout(ValueLayout.JAVA_BYTE)
+    .sequenceLayout(
+      Long.MaxValue / ValueLayout.JAVA_BYTE.byteSize(),
+      ValueLayout.JAVA_BYTE,
+    )
     .varHandle(PathElement.sequenceElement())
 
   val shortVh = MemoryLayout
-    .sequenceLayout(ValueLayout.JAVA_SHORT)
+    .sequenceLayout(
+      Long.MaxValue / ValueLayout.JAVA_SHORT.byteSize(),
+      ValueLayout.JAVA_SHORT,
+    )
     .varHandle(PathElement.sequenceElement())
 
   val intVh = MemoryLayout
-    .sequenceLayout(ValueLayout.JAVA_INT)
+    .sequenceLayout(
+      Long.MaxValue / ValueLayout.JAVA_INT.byteSize(),
+      ValueLayout.JAVA_INT,
+    )
     .varHandle(PathElement.sequenceElement())
 
   val longVh = MemoryLayout
-    .sequenceLayout(ValueLayout.JAVA_LONG)
+    .sequenceLayout(
+      Long.MaxValue / ValueLayout.JAVA_LONG.byteSize(),
+      ValueLayout.JAVA_LONG,
+    )
     .varHandle(PathElement.sequenceElement())
 
   val floatVh = MemoryLayout
-    .sequenceLayout(ValueLayout.JAVA_FLOAT)
+    .sequenceLayout(
+      Long.MaxValue / ValueLayout.JAVA_FLOAT.byteSize(),
+      ValueLayout.JAVA_FLOAT,
+    )
     .varHandle(PathElement.sequenceElement())
 
   val doubleVh = MemoryLayout
-    .sequenceLayout(ValueLayout.JAVA_DOUBLE)
+    .sequenceLayout(
+      Long.MaxValue / ValueLayout.JAVA_DOUBLE.byteSize(),
+      ValueLayout.JAVA_DOUBLE,
+    )
     .varHandle(PathElement.sequenceElement())
 
   val charVh = MemoryLayout
-    .sequenceLayout(ValueLayout.JAVA_CHAR)
+    .sequenceLayout(
+      Long.MaxValue / ValueLayout.JAVA_CHAR.byteSize(),
+      ValueLayout.JAVA_CHAR,
+    )
     .varHandle(PathElement.sequenceElement())
 
   val boolVh = MemoryLayout
-    .sequenceLayout(ValueLayout.JAVA_BOOLEAN)
+    .sequenceLayout(
+      Long.MaxValue / ValueLayout.JAVA_BOOLEAN.byteSize(),
+      ValueLayout.JAVA_BOOLEAN,
+    )
     .varHandle(PathElement.sequenceElement())
 
   trait MemoryHandleSyntax {
@@ -221,56 +245,56 @@ object MemoryHandle {
     def get[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Byte = byteVh.get(mem.asJava, (vh.offset0) >> 0)
+    ): Byte = byteVh.get(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getVolatile[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Byte = byteVh.getVolatile(mem.asJava, (vh.offset0) >> 0)
+    ): Byte = byteVh.getVolatile(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getOpaque[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Byte = byteVh.getOpaque(mem.asJava, (vh.offset0) >> 0)
+    ): Byte = byteVh.getOpaque(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getAcquire[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Byte = byteVh.getAcquire(mem.asJava, (vh.offset0) >> 0)
+    ): Byte = byteVh.getAcquire(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def set[R <: Global](mem: Memory[L, R], value: Byte)(
       implicit
       region: Region[R],
-    ): Unit = byteVh.set(mem.asJava, (vh.offset0) >> 0, value)
+    ): Unit = byteVh.set(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setVolatile[R <: Global](mem: Memory[L, R], value: Byte)(
       implicit
       region: Region[R],
-    ): Unit = byteVh.setVolatile(mem.asJava, (vh.offset0) >> 0, value)
+    ): Unit = byteVh.setVolatile(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setOpaque[R <: Global](mem: Memory[L, R], value: Byte)(
       implicit
       region: Region[R],
-    ): Unit = byteVh.setOpaque(mem.asJava, (vh.offset0) >> 0, value)
+    ): Unit = byteVh.setOpaque(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setRelease[R <: Global](mem: Memory[L, R], value: Byte)(
       implicit
       region: Region[R],
-    ): Unit = byteVh.setRelease(mem.asJava, (vh.offset0) >> 0, value)
+    ): Unit = byteVh.setRelease(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -282,8 +306,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Boolean =
-      byteVh
-        .compareAndSet(mem.asJava, (vh.offset0) >> 0, expectedValue, newValue)
+      byteVh.compareAndSet(mem.asJava, vh.offset0, 0L, expectedValue, newValue)
 
     @IntrinsicCandidate
     @inline
@@ -297,7 +320,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0) >> 0,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -314,7 +338,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0) >> 0,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -331,7 +356,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0) >> 0,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -348,7 +374,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Byte =
-      byteVh.get(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0)
+      byteVh.get(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -356,7 +382,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Byte =
-      byteVh.get(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0)
+      byteVh.get(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -365,7 +391,7 @@ object MemoryHandle {
       region: Region[R],
     ): Byte =
       byteVh
-        .getVolatile(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0)
+        .getVolatile(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -374,7 +400,7 @@ object MemoryHandle {
       region: Region[R],
     ): Byte =
       byteVh
-        .getVolatile(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0)
+        .getVolatile(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -382,8 +408,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Byte =
-      byteVh
-        .getOpaque(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0)
+      byteVh.getOpaque(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -391,8 +416,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Byte =
-      byteVh
-        .getOpaque(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0)
+      byteVh.getOpaque(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -400,8 +424,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Byte =
-      byteVh
-        .getAcquire(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0)
+      byteVh.getAcquire(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -409,8 +432,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Byte =
-      byteVh
-        .getAcquire(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0)
+      byteVh.getAcquire(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -418,8 +440,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Unit =
-      byteVh
-        .set(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0, value)
+      byteVh.set(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -427,8 +448,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Unit =
-      byteVh
-        .set(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0, value)
+      byteVh.set(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -438,7 +458,8 @@ object MemoryHandle {
     ): Unit =
       byteVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -450,7 +471,8 @@ object MemoryHandle {
     ): Unit =
       byteVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -462,7 +484,8 @@ object MemoryHandle {
     ): Unit =
       byteVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -474,7 +497,8 @@ object MemoryHandle {
     ): Unit =
       byteVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -486,7 +510,8 @@ object MemoryHandle {
     ): Unit =
       byteVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -498,7 +523,8 @@ object MemoryHandle {
     ): Unit =
       byteVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -515,7 +541,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -533,7 +560,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -551,7 +579,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -569,7 +598,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -587,7 +617,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -605,7 +636,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -623,7 +655,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -641,7 +674,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -660,9 +694,8 @@ object MemoryHandle {
     ): Byte =
       byteVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -673,9 +706,8 @@ object MemoryHandle {
     ): Byte =
       byteVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -686,9 +718,8 @@ object MemoryHandle {
     ): Byte =
       byteVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -699,9 +730,8 @@ object MemoryHandle {
     ): Byte =
       byteVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -712,9 +742,8 @@ object MemoryHandle {
     ): Byte =
       byteVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -725,9 +754,8 @@ object MemoryHandle {
     ): Byte =
       byteVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -738,9 +766,8 @@ object MemoryHandle {
     ): Byte =
       byteVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -751,9 +778,8 @@ object MemoryHandle {
     ): Byte =
       byteVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -764,9 +790,8 @@ object MemoryHandle {
     ): Unit =
       byteVh.set(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -778,9 +803,8 @@ object MemoryHandle {
     ): Unit =
       byteVh.set(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -797,9 +821,8 @@ object MemoryHandle {
     ): Unit =
       byteVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -816,9 +839,8 @@ object MemoryHandle {
     ): Unit =
       byteVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -835,9 +857,8 @@ object MemoryHandle {
     ): Unit =
       byteVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -854,9 +875,8 @@ object MemoryHandle {
     ): Unit =
       byteVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -873,9 +893,8 @@ object MemoryHandle {
     ): Unit =
       byteVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -892,9 +911,8 @@ object MemoryHandle {
     ): Unit =
       byteVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -912,9 +930,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -933,9 +950,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -954,9 +970,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -975,9 +990,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -996,9 +1010,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1017,9 +1030,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1038,9 +1050,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1059,9 +1070,8 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1080,8 +1090,9 @@ object MemoryHandle {
     ): Byte =
       byteVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -1092,8 +1103,9 @@ object MemoryHandle {
     ): Byte =
       byteVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -1109,8 +1121,9 @@ object MemoryHandle {
     ): Byte =
       byteVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -1121,8 +1134,9 @@ object MemoryHandle {
     ): Byte =
       byteVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -1133,8 +1147,9 @@ object MemoryHandle {
     ): Byte =
       byteVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -1145,8 +1160,9 @@ object MemoryHandle {
     ): Byte =
       byteVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -1162,8 +1178,9 @@ object MemoryHandle {
     ): Byte =
       byteVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -1174,8 +1191,9 @@ object MemoryHandle {
     ): Byte =
       byteVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -1192,8 +1210,9 @@ object MemoryHandle {
     ): Unit =
       byteVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -1211,8 +1230,9 @@ object MemoryHandle {
     ): Unit =
       byteVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -1230,8 +1250,9 @@ object MemoryHandle {
     ): Unit =
       byteVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -1249,8 +1270,9 @@ object MemoryHandle {
     ): Unit =
       byteVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -1268,8 +1290,9 @@ object MemoryHandle {
     ): Unit =
       byteVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -1287,8 +1310,9 @@ object MemoryHandle {
     ): Unit =
       byteVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -1306,8 +1330,9 @@ object MemoryHandle {
     ): Unit =
       byteVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -1325,8 +1350,9 @@ object MemoryHandle {
     ): Unit =
       byteVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -1345,8 +1371,9 @@ object MemoryHandle {
     ): Boolean =
       byteVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1366,8 +1393,9 @@ object MemoryHandle {
     ): Boolean =
       byteVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1387,8 +1415,9 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1408,8 +1437,9 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1429,8 +1459,9 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1450,8 +1481,9 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1471,8 +1503,9 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1492,8 +1525,9 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1518,8 +1552,9 @@ object MemoryHandle {
     ): Byte =
       byteVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -1530,8 +1565,9 @@ object MemoryHandle {
     ): Byte =
       byteVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -1548,8 +1584,9 @@ object MemoryHandle {
     ): Byte =
       byteVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -1566,8 +1603,9 @@ object MemoryHandle {
     ): Byte =
       byteVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -1584,8 +1622,9 @@ object MemoryHandle {
     ): Byte =
       byteVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -1602,8 +1641,9 @@ object MemoryHandle {
     ): Byte =
       byteVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -1620,8 +1660,9 @@ object MemoryHandle {
     ): Byte =
       byteVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -1638,8 +1679,9 @@ object MemoryHandle {
     ): Byte =
       byteVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -1657,8 +1699,9 @@ object MemoryHandle {
     ): Unit =
       byteVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -1677,8 +1720,9 @@ object MemoryHandle {
     ): Unit =
       byteVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -1697,8 +1741,9 @@ object MemoryHandle {
     ): Unit =
       byteVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -1717,8 +1762,9 @@ object MemoryHandle {
     ): Unit =
       byteVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -1737,8 +1783,9 @@ object MemoryHandle {
     ): Unit =
       byteVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -1757,8 +1804,9 @@ object MemoryHandle {
     ): Unit =
       byteVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -1777,8 +1825,9 @@ object MemoryHandle {
     ): Unit =
       byteVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -1797,8 +1846,9 @@ object MemoryHandle {
     ): Unit =
       byteVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -1818,8 +1868,9 @@ object MemoryHandle {
     ): Boolean =
       byteVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1840,8 +1891,9 @@ object MemoryHandle {
     ): Boolean =
       byteVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1862,8 +1914,9 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1884,8 +1937,9 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1906,8 +1960,9 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1928,8 +1983,9 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1950,8 +2006,9 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1972,8 +2029,9 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 0,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -1999,9 +2057,10 @@ object MemoryHandle {
     ): Byte =
       byteVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -2019,9 +2078,10 @@ object MemoryHandle {
     ): Byte =
       byteVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -2039,9 +2099,10 @@ object MemoryHandle {
     ): Byte =
       byteVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -2059,9 +2120,10 @@ object MemoryHandle {
     ): Byte =
       byteVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -2079,9 +2141,10 @@ object MemoryHandle {
     ): Byte =
       byteVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -2099,9 +2162,10 @@ object MemoryHandle {
     ): Byte =
       byteVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -2119,9 +2183,10 @@ object MemoryHandle {
     ): Byte =
       byteVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -2139,9 +2204,10 @@ object MemoryHandle {
     ): Byte =
       byteVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -2160,9 +2226,10 @@ object MemoryHandle {
     ): Unit =
       byteVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -2182,9 +2249,10 @@ object MemoryHandle {
     ): Unit =
       byteVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -2204,9 +2272,10 @@ object MemoryHandle {
     ): Unit =
       byteVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -2226,9 +2295,10 @@ object MemoryHandle {
     ): Unit =
       byteVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -2248,9 +2318,10 @@ object MemoryHandle {
     ): Unit =
       byteVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -2270,9 +2341,10 @@ object MemoryHandle {
     ): Unit =
       byteVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -2292,9 +2364,10 @@ object MemoryHandle {
     ): Unit =
       byteVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -2314,9 +2387,10 @@ object MemoryHandle {
     ): Unit =
       byteVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -2337,9 +2411,10 @@ object MemoryHandle {
     ): Boolean =
       byteVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -2361,9 +2436,10 @@ object MemoryHandle {
     ): Boolean =
       byteVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -2385,9 +2461,10 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -2409,9 +2486,10 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -2433,9 +2511,10 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -2457,9 +2536,10 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -2481,9 +2561,10 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -2505,9 +2586,10 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 0,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -2534,9 +2616,10 @@ object MemoryHandle {
     ): Byte =
       byteVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -2555,9 +2638,10 @@ object MemoryHandle {
     ): Byte =
       byteVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -2576,9 +2660,10 @@ object MemoryHandle {
     ): Byte =
       byteVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -2597,9 +2682,10 @@ object MemoryHandle {
     ): Byte =
       byteVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -2618,9 +2704,10 @@ object MemoryHandle {
     ): Byte =
       byteVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -2639,9 +2726,10 @@ object MemoryHandle {
     ): Byte =
       byteVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -2660,9 +2748,10 @@ object MemoryHandle {
     ): Byte =
       byteVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -2681,9 +2770,10 @@ object MemoryHandle {
     ): Byte =
       byteVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -2703,9 +2793,10 @@ object MemoryHandle {
     ): Unit =
       byteVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -2726,9 +2817,10 @@ object MemoryHandle {
     ): Unit =
       byteVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -2749,9 +2841,10 @@ object MemoryHandle {
     ): Unit =
       byteVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -2772,9 +2865,10 @@ object MemoryHandle {
     ): Unit =
       byteVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -2795,9 +2889,10 @@ object MemoryHandle {
     ): Unit =
       byteVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -2818,9 +2913,10 @@ object MemoryHandle {
     ): Unit =
       byteVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -2841,9 +2937,10 @@ object MemoryHandle {
     ): Unit =
       byteVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -2864,9 +2961,10 @@ object MemoryHandle {
     ): Unit =
       byteVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -2888,9 +2986,10 @@ object MemoryHandle {
     ): Boolean =
       byteVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -2913,9 +3012,10 @@ object MemoryHandle {
     ): Boolean =
       byteVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -2938,9 +3038,10 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -2963,9 +3064,10 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -2988,9 +3090,10 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3013,9 +3116,10 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3038,9 +3142,10 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3063,9 +3168,10 @@ object MemoryHandle {
     ): Boolean =
       byteVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 0,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3081,56 +3187,56 @@ object MemoryHandle {
     def get[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Short = shortVh.get(mem.asJava, (vh.offset0) >> 1)
+    ): Short = shortVh.get(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getVolatile[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Short = shortVh.getVolatile(mem.asJava, (vh.offset0) >> 1)
+    ): Short = shortVh.getVolatile(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getOpaque[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Short = shortVh.getOpaque(mem.asJava, (vh.offset0) >> 1)
+    ): Short = shortVh.getOpaque(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getAcquire[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Short = shortVh.getAcquire(mem.asJava, (vh.offset0) >> 1)
+    ): Short = shortVh.getAcquire(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def set[R <: Global](mem: Memory[L, R], value: Short)(
       implicit
       region: Region[R],
-    ): Unit = shortVh.set(mem.asJava, (vh.offset0) >> 1, value)
+    ): Unit = shortVh.set(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setVolatile[R <: Global](mem: Memory[L, R], value: Short)(
       implicit
       region: Region[R],
-    ): Unit = shortVh.setVolatile(mem.asJava, (vh.offset0) >> 1, value)
+    ): Unit = shortVh.setVolatile(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setOpaque[R <: Global](mem: Memory[L, R], value: Short)(
       implicit
       region: Region[R],
-    ): Unit = shortVh.setOpaque(mem.asJava, (vh.offset0) >> 1, value)
+    ): Unit = shortVh.setOpaque(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setRelease[R <: Global](mem: Memory[L, R], value: Short)(
       implicit
       region: Region[R],
-    ): Unit = shortVh.setRelease(mem.asJava, (vh.offset0) >> 1, value)
+    ): Unit = shortVh.setRelease(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -3142,8 +3248,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Boolean =
-      shortVh
-        .compareAndSet(mem.asJava, (vh.offset0) >> 1, expectedValue, newValue)
+      shortVh.compareAndSet(mem.asJava, vh.offset0, 0L, expectedValue, newValue)
 
     @IntrinsicCandidate
     @inline
@@ -3157,7 +3262,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0) >> 1,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3174,7 +3280,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0) >> 1,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3191,7 +3298,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0) >> 1,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3208,7 +3316,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Short =
-      shortVh.get(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1)
+      shortVh.get(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -3216,7 +3324,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Short =
-      shortVh.get(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1)
+      shortVh.get(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -3225,7 +3333,7 @@ object MemoryHandle {
       region: Region[R],
     ): Short =
       shortVh
-        .getVolatile(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1)
+        .getVolatile(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -3234,7 +3342,7 @@ object MemoryHandle {
       region: Region[R],
     ): Short =
       shortVh
-        .getVolatile(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1)
+        .getVolatile(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -3242,8 +3350,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Short =
-      shortVh
-        .getOpaque(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1)
+      shortVh.getOpaque(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -3251,8 +3358,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Short =
-      shortVh
-        .getOpaque(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1)
+      shortVh.getOpaque(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -3261,7 +3367,7 @@ object MemoryHandle {
       region: Region[R],
     ): Short =
       shortVh
-        .getAcquire(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1)
+        .getAcquire(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -3270,7 +3376,7 @@ object MemoryHandle {
       region: Region[R],
     ): Short =
       shortVh
-        .getAcquire(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1)
+        .getAcquire(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -3279,7 +3385,7 @@ object MemoryHandle {
       region: Region[R],
     ): Unit =
       shortVh
-        .set(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1, value)
+        .set(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -3288,7 +3394,7 @@ object MemoryHandle {
       region: Region[R],
     ): Unit =
       shortVh
-        .set(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1, value)
+        .set(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -3298,7 +3404,8 @@ object MemoryHandle {
     ): Unit =
       shortVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -3310,7 +3417,8 @@ object MemoryHandle {
     ): Unit =
       shortVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -3322,7 +3430,8 @@ object MemoryHandle {
     ): Unit =
       shortVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -3334,7 +3443,8 @@ object MemoryHandle {
     ): Unit =
       shortVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -3346,7 +3456,8 @@ object MemoryHandle {
     ): Unit =
       shortVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -3358,7 +3469,8 @@ object MemoryHandle {
     ): Unit =
       shortVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -3375,7 +3487,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3393,7 +3506,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3411,7 +3525,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3429,7 +3544,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3447,7 +3563,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3465,7 +3582,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3483,7 +3601,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3501,7 +3620,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3520,9 +3640,8 @@ object MemoryHandle {
     ): Short =
       shortVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -3533,9 +3652,8 @@ object MemoryHandle {
     ): Short =
       shortVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -3546,9 +3664,8 @@ object MemoryHandle {
     ): Short =
       shortVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -3559,9 +3676,8 @@ object MemoryHandle {
     ): Short =
       shortVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -3572,9 +3688,8 @@ object MemoryHandle {
     ): Short =
       shortVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -3585,9 +3700,8 @@ object MemoryHandle {
     ): Short =
       shortVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -3598,9 +3712,8 @@ object MemoryHandle {
     ): Short =
       shortVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -3611,9 +3724,8 @@ object MemoryHandle {
     ): Short =
       shortVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -3624,9 +3736,8 @@ object MemoryHandle {
     ): Unit =
       shortVh.set(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -3638,9 +3749,8 @@ object MemoryHandle {
     ): Unit =
       shortVh.set(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -3657,9 +3767,8 @@ object MemoryHandle {
     ): Unit =
       shortVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -3676,9 +3785,8 @@ object MemoryHandle {
     ): Unit =
       shortVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -3695,9 +3803,8 @@ object MemoryHandle {
     ): Unit =
       shortVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -3714,9 +3821,8 @@ object MemoryHandle {
     ): Unit =
       shortVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -3733,9 +3839,8 @@ object MemoryHandle {
     ): Unit =
       shortVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -3752,9 +3857,8 @@ object MemoryHandle {
     ): Unit =
       shortVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -3772,9 +3876,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3793,9 +3896,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3814,9 +3916,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3835,9 +3936,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3856,9 +3956,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3877,9 +3976,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3898,9 +3996,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3919,9 +4016,8 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -3940,8 +4036,9 @@ object MemoryHandle {
     ): Short =
       shortVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -3952,8 +4049,9 @@ object MemoryHandle {
     ): Short =
       shortVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -3969,8 +4067,9 @@ object MemoryHandle {
     ): Short =
       shortVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -3981,8 +4080,9 @@ object MemoryHandle {
     ): Short =
       shortVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -3993,8 +4093,9 @@ object MemoryHandle {
     ): Short =
       shortVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4005,8 +4106,9 @@ object MemoryHandle {
     ): Short =
       shortVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4022,8 +4124,9 @@ object MemoryHandle {
     ): Short =
       shortVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4034,8 +4137,9 @@ object MemoryHandle {
     ): Short =
       shortVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4052,8 +4156,9 @@ object MemoryHandle {
     ): Unit =
       shortVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -4071,8 +4176,9 @@ object MemoryHandle {
     ): Unit =
       shortVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -4090,8 +4196,9 @@ object MemoryHandle {
     ): Unit =
       shortVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -4109,8 +4216,9 @@ object MemoryHandle {
     ): Unit =
       shortVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -4128,8 +4236,9 @@ object MemoryHandle {
     ): Unit =
       shortVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -4147,8 +4256,9 @@ object MemoryHandle {
     ): Unit =
       shortVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -4166,8 +4276,9 @@ object MemoryHandle {
     ): Unit =
       shortVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -4185,8 +4296,9 @@ object MemoryHandle {
     ): Unit =
       shortVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -4205,8 +4317,9 @@ object MemoryHandle {
     ): Boolean =
       shortVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -4226,8 +4339,9 @@ object MemoryHandle {
     ): Boolean =
       shortVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -4247,8 +4361,9 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -4268,8 +4383,9 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -4289,8 +4405,9 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -4310,8 +4427,9 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -4331,8 +4449,9 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -4352,8 +4471,9 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -4378,8 +4498,9 @@ object MemoryHandle {
     ): Short =
       shortVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4390,8 +4511,9 @@ object MemoryHandle {
     ): Short =
       shortVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4408,8 +4530,9 @@ object MemoryHandle {
     ): Short =
       shortVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4426,8 +4549,9 @@ object MemoryHandle {
     ): Short =
       shortVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4444,8 +4568,9 @@ object MemoryHandle {
     ): Short =
       shortVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4462,8 +4587,9 @@ object MemoryHandle {
     ): Short =
       shortVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4480,8 +4606,9 @@ object MemoryHandle {
     ): Short =
       shortVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4498,8 +4625,9 @@ object MemoryHandle {
     ): Short =
       shortVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4517,8 +4645,9 @@ object MemoryHandle {
     ): Unit =
       shortVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -4537,8 +4666,9 @@ object MemoryHandle {
     ): Unit =
       shortVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -4557,8 +4687,9 @@ object MemoryHandle {
     ): Unit =
       shortVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -4577,8 +4708,9 @@ object MemoryHandle {
     ): Unit =
       shortVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -4597,8 +4729,9 @@ object MemoryHandle {
     ): Unit =
       shortVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -4617,8 +4750,9 @@ object MemoryHandle {
     ): Unit =
       shortVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -4637,8 +4771,9 @@ object MemoryHandle {
     ): Unit =
       shortVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -4657,8 +4792,9 @@ object MemoryHandle {
     ): Unit =
       shortVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -4678,8 +4814,9 @@ object MemoryHandle {
     ): Boolean =
       shortVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -4700,8 +4837,9 @@ object MemoryHandle {
     ): Boolean =
       shortVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -4722,8 +4860,9 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -4744,8 +4883,9 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -4766,8 +4906,9 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -4788,8 +4929,9 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -4810,8 +4952,9 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -4832,8 +4975,9 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -4859,9 +5003,10 @@ object MemoryHandle {
     ): Short =
       shortVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4879,9 +5024,10 @@ object MemoryHandle {
     ): Short =
       shortVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4899,9 +5045,10 @@ object MemoryHandle {
     ): Short =
       shortVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4919,9 +5066,10 @@ object MemoryHandle {
     ): Short =
       shortVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4939,9 +5087,10 @@ object MemoryHandle {
     ): Short =
       shortVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4959,9 +5108,10 @@ object MemoryHandle {
     ): Short =
       shortVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4979,9 +5129,10 @@ object MemoryHandle {
     ): Short =
       shortVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -4999,9 +5150,10 @@ object MemoryHandle {
     ): Short =
       shortVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -5020,9 +5172,10 @@ object MemoryHandle {
     ): Unit =
       shortVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -5042,9 +5195,10 @@ object MemoryHandle {
     ): Unit =
       shortVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -5064,9 +5218,10 @@ object MemoryHandle {
     ): Unit =
       shortVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -5086,9 +5241,10 @@ object MemoryHandle {
     ): Unit =
       shortVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -5108,9 +5264,10 @@ object MemoryHandle {
     ): Unit =
       shortVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -5130,9 +5287,10 @@ object MemoryHandle {
     ): Unit =
       shortVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -5152,9 +5310,10 @@ object MemoryHandle {
     ): Unit =
       shortVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -5174,9 +5333,10 @@ object MemoryHandle {
     ): Unit =
       shortVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -5197,9 +5357,10 @@ object MemoryHandle {
     ): Boolean =
       shortVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -5221,9 +5382,10 @@ object MemoryHandle {
     ): Boolean =
       shortVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -5245,9 +5407,10 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -5269,9 +5432,10 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -5293,9 +5457,10 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -5317,9 +5482,10 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -5341,9 +5507,10 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -5365,9 +5532,10 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -5394,9 +5562,10 @@ object MemoryHandle {
     ): Short =
       shortVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -5415,9 +5584,10 @@ object MemoryHandle {
     ): Short =
       shortVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -5436,9 +5606,10 @@ object MemoryHandle {
     ): Short =
       shortVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -5457,9 +5628,10 @@ object MemoryHandle {
     ): Short =
       shortVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -5478,9 +5650,10 @@ object MemoryHandle {
     ): Short =
       shortVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -5499,9 +5672,10 @@ object MemoryHandle {
     ): Short =
       shortVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -5520,9 +5694,10 @@ object MemoryHandle {
     ): Short =
       shortVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -5541,9 +5716,10 @@ object MemoryHandle {
     ): Short =
       shortVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -5563,9 +5739,10 @@ object MemoryHandle {
     ): Unit =
       shortVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -5586,9 +5763,10 @@ object MemoryHandle {
     ): Unit =
       shortVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -5609,9 +5787,10 @@ object MemoryHandle {
     ): Unit =
       shortVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -5632,9 +5811,10 @@ object MemoryHandle {
     ): Unit =
       shortVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -5655,9 +5835,10 @@ object MemoryHandle {
     ): Unit =
       shortVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -5678,9 +5859,10 @@ object MemoryHandle {
     ): Unit =
       shortVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -5701,9 +5883,10 @@ object MemoryHandle {
     ): Unit =
       shortVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -5724,9 +5907,10 @@ object MemoryHandle {
     ): Unit =
       shortVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -5748,9 +5932,10 @@ object MemoryHandle {
     ): Boolean =
       shortVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -5773,9 +5958,10 @@ object MemoryHandle {
     ): Boolean =
       shortVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -5798,9 +5984,10 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -5823,9 +6010,10 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -5848,9 +6036,10 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -5873,9 +6062,10 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -5898,9 +6088,10 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -5923,9 +6114,10 @@ object MemoryHandle {
     ): Boolean =
       shortVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -5941,56 +6133,56 @@ object MemoryHandle {
     def get[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Char = charVh.get(mem.asJava, (vh.offset0) >> 1)
+    ): Char = charVh.get(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getVolatile[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Char = charVh.getVolatile(mem.asJava, (vh.offset0) >> 1)
+    ): Char = charVh.getVolatile(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getOpaque[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Char = charVh.getOpaque(mem.asJava, (vh.offset0) >> 1)
+    ): Char = charVh.getOpaque(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getAcquire[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Char = charVh.getAcquire(mem.asJava, (vh.offset0) >> 1)
+    ): Char = charVh.getAcquire(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def set[R <: Global](mem: Memory[L, R], value: Char)(
       implicit
       region: Region[R],
-    ): Unit = charVh.set(mem.asJava, (vh.offset0) >> 1, value)
+    ): Unit = charVh.set(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setVolatile[R <: Global](mem: Memory[L, R], value: Char)(
       implicit
       region: Region[R],
-    ): Unit = charVh.setVolatile(mem.asJava, (vh.offset0) >> 1, value)
+    ): Unit = charVh.setVolatile(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setOpaque[R <: Global](mem: Memory[L, R], value: Char)(
       implicit
       region: Region[R],
-    ): Unit = charVh.setOpaque(mem.asJava, (vh.offset0) >> 1, value)
+    ): Unit = charVh.setOpaque(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setRelease[R <: Global](mem: Memory[L, R], value: Char)(
       implicit
       region: Region[R],
-    ): Unit = charVh.setRelease(mem.asJava, (vh.offset0) >> 1, value)
+    ): Unit = charVh.setRelease(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -6002,8 +6194,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Boolean =
-      charVh
-        .compareAndSet(mem.asJava, (vh.offset0) >> 1, expectedValue, newValue)
+      charVh.compareAndSet(mem.asJava, vh.offset0, 0L, expectedValue, newValue)
 
     @IntrinsicCandidate
     @inline
@@ -6017,7 +6208,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0) >> 1,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6034,7 +6226,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0) >> 1,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6051,7 +6244,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0) >> 1,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6068,7 +6262,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Char =
-      charVh.get(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1)
+      charVh.get(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -6076,7 +6270,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Char =
-      charVh.get(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1)
+      charVh.get(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -6085,7 +6279,7 @@ object MemoryHandle {
       region: Region[R],
     ): Char =
       charVh
-        .getVolatile(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1)
+        .getVolatile(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -6094,7 +6288,7 @@ object MemoryHandle {
       region: Region[R],
     ): Char =
       charVh
-        .getVolatile(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1)
+        .getVolatile(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -6102,8 +6296,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Char =
-      charVh
-        .getOpaque(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1)
+      charVh.getOpaque(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -6111,8 +6304,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Char =
-      charVh
-        .getOpaque(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1)
+      charVh.getOpaque(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -6120,8 +6312,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Char =
-      charVh
-        .getAcquire(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1)
+      charVh.getAcquire(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -6129,8 +6320,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Char =
-      charVh
-        .getAcquire(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1)
+      charVh.getAcquire(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -6138,8 +6328,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Unit =
-      charVh
-        .set(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1, value)
+      charVh.set(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -6147,8 +6336,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Unit =
-      charVh
-        .set(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1, value)
+      charVh.set(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -6158,7 +6346,8 @@ object MemoryHandle {
     ): Unit =
       charVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -6170,7 +6359,8 @@ object MemoryHandle {
     ): Unit =
       charVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -6182,7 +6372,8 @@ object MemoryHandle {
     ): Unit =
       charVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -6194,7 +6385,8 @@ object MemoryHandle {
     ): Unit =
       charVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -6206,7 +6398,8 @@ object MemoryHandle {
     ): Unit =
       charVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -6218,7 +6411,8 @@ object MemoryHandle {
     ): Unit =
       charVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -6235,7 +6429,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6253,7 +6448,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6271,7 +6467,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6289,7 +6486,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6307,7 +6505,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6325,7 +6524,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6343,7 +6543,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6361,7 +6562,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6380,9 +6582,8 @@ object MemoryHandle {
     ): Char =
       charVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -6393,9 +6594,8 @@ object MemoryHandle {
     ): Char =
       charVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -6406,9 +6606,8 @@ object MemoryHandle {
     ): Char =
       charVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -6419,9 +6618,8 @@ object MemoryHandle {
     ): Char =
       charVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -6432,9 +6630,8 @@ object MemoryHandle {
     ): Char =
       charVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -6445,9 +6642,8 @@ object MemoryHandle {
     ): Char =
       charVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -6458,9 +6654,8 @@ object MemoryHandle {
     ): Char =
       charVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -6471,9 +6666,8 @@ object MemoryHandle {
     ): Char =
       charVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -6484,9 +6678,8 @@ object MemoryHandle {
     ): Unit =
       charVh.set(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -6498,9 +6691,8 @@ object MemoryHandle {
     ): Unit =
       charVh.set(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -6517,9 +6709,8 @@ object MemoryHandle {
     ): Unit =
       charVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -6536,9 +6727,8 @@ object MemoryHandle {
     ): Unit =
       charVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -6555,9 +6745,8 @@ object MemoryHandle {
     ): Unit =
       charVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -6574,9 +6763,8 @@ object MemoryHandle {
     ): Unit =
       charVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -6593,9 +6781,8 @@ object MemoryHandle {
     ): Unit =
       charVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -6612,9 +6799,8 @@ object MemoryHandle {
     ): Unit =
       charVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -6632,9 +6818,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6653,9 +6838,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6674,9 +6858,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6695,9 +6878,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6716,9 +6898,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6737,9 +6918,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6758,9 +6938,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6779,9 +6958,8 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -6800,8 +6978,9 @@ object MemoryHandle {
     ): Char =
       charVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -6812,8 +6991,9 @@ object MemoryHandle {
     ): Char =
       charVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -6829,8 +7009,9 @@ object MemoryHandle {
     ): Char =
       charVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -6841,8 +7022,9 @@ object MemoryHandle {
     ): Char =
       charVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -6853,8 +7035,9 @@ object MemoryHandle {
     ): Char =
       charVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -6865,8 +7048,9 @@ object MemoryHandle {
     ): Char =
       charVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -6882,8 +7066,9 @@ object MemoryHandle {
     ): Char =
       charVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -6894,8 +7079,9 @@ object MemoryHandle {
     ): Char =
       charVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -6912,8 +7098,9 @@ object MemoryHandle {
     ): Unit =
       charVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -6931,8 +7118,9 @@ object MemoryHandle {
     ): Unit =
       charVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -6950,8 +7138,9 @@ object MemoryHandle {
     ): Unit =
       charVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -6969,8 +7158,9 @@ object MemoryHandle {
     ): Unit =
       charVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -6988,8 +7178,9 @@ object MemoryHandle {
     ): Unit =
       charVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -7007,8 +7198,9 @@ object MemoryHandle {
     ): Unit =
       charVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -7026,8 +7218,9 @@ object MemoryHandle {
     ): Unit =
       charVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -7045,8 +7238,9 @@ object MemoryHandle {
     ): Unit =
       charVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -7065,8 +7259,9 @@ object MemoryHandle {
     ): Boolean =
       charVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -7086,8 +7281,9 @@ object MemoryHandle {
     ): Boolean =
       charVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -7107,8 +7303,9 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -7128,8 +7325,9 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -7149,8 +7347,9 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -7170,8 +7369,9 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -7191,8 +7391,9 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -7212,8 +7413,9 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -7238,8 +7440,9 @@ object MemoryHandle {
     ): Char =
       charVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -7250,8 +7453,9 @@ object MemoryHandle {
     ): Char =
       charVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -7268,8 +7472,9 @@ object MemoryHandle {
     ): Char =
       charVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -7286,8 +7491,9 @@ object MemoryHandle {
     ): Char =
       charVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -7304,8 +7510,9 @@ object MemoryHandle {
     ): Char =
       charVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -7322,8 +7529,9 @@ object MemoryHandle {
     ): Char =
       charVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -7340,8 +7548,9 @@ object MemoryHandle {
     ): Char =
       charVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -7358,8 +7567,9 @@ object MemoryHandle {
     ): Char =
       charVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -7377,8 +7587,9 @@ object MemoryHandle {
     ): Unit =
       charVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -7397,8 +7608,9 @@ object MemoryHandle {
     ): Unit =
       charVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -7417,8 +7629,9 @@ object MemoryHandle {
     ): Unit =
       charVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -7437,8 +7650,9 @@ object MemoryHandle {
     ): Unit =
       charVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -7457,8 +7671,9 @@ object MemoryHandle {
     ): Unit =
       charVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -7477,8 +7692,9 @@ object MemoryHandle {
     ): Unit =
       charVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -7497,8 +7713,9 @@ object MemoryHandle {
     ): Unit =
       charVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -7517,8 +7734,9 @@ object MemoryHandle {
     ): Unit =
       charVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -7538,8 +7756,9 @@ object MemoryHandle {
     ): Boolean =
       charVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -7560,8 +7779,9 @@ object MemoryHandle {
     ): Boolean =
       charVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -7582,8 +7802,9 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -7604,8 +7825,9 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -7626,8 +7848,9 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -7648,8 +7871,9 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -7670,8 +7894,9 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -7692,8 +7917,9 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 1,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -7719,9 +7945,10 @@ object MemoryHandle {
     ): Char =
       charVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -7739,9 +7966,10 @@ object MemoryHandle {
     ): Char =
       charVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -7759,9 +7987,10 @@ object MemoryHandle {
     ): Char =
       charVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -7779,9 +8008,10 @@ object MemoryHandle {
     ): Char =
       charVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -7799,9 +8029,10 @@ object MemoryHandle {
     ): Char =
       charVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -7819,9 +8050,10 @@ object MemoryHandle {
     ): Char =
       charVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -7839,9 +8071,10 @@ object MemoryHandle {
     ): Char =
       charVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -7859,9 +8092,10 @@ object MemoryHandle {
     ): Char =
       charVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -7880,9 +8114,10 @@ object MemoryHandle {
     ): Unit =
       charVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -7902,9 +8137,10 @@ object MemoryHandle {
     ): Unit =
       charVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -7924,9 +8160,10 @@ object MemoryHandle {
     ): Unit =
       charVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -7946,9 +8183,10 @@ object MemoryHandle {
     ): Unit =
       charVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -7968,9 +8206,10 @@ object MemoryHandle {
     ): Unit =
       charVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -7990,9 +8229,10 @@ object MemoryHandle {
     ): Unit =
       charVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -8012,9 +8252,10 @@ object MemoryHandle {
     ): Unit =
       charVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -8034,9 +8275,10 @@ object MemoryHandle {
     ): Unit =
       charVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -8057,9 +8299,10 @@ object MemoryHandle {
     ): Boolean =
       charVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8081,9 +8324,10 @@ object MemoryHandle {
     ): Boolean =
       charVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8105,9 +8349,10 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8129,9 +8374,10 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8153,9 +8399,10 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8177,9 +8424,10 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8201,9 +8449,10 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8225,9 +8474,10 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 1,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8254,9 +8504,10 @@ object MemoryHandle {
     ): Char =
       charVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -8275,9 +8526,10 @@ object MemoryHandle {
     ): Char =
       charVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -8296,9 +8548,10 @@ object MemoryHandle {
     ): Char =
       charVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -8317,9 +8570,10 @@ object MemoryHandle {
     ): Char =
       charVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -8338,9 +8592,10 @@ object MemoryHandle {
     ): Char =
       charVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -8359,9 +8614,10 @@ object MemoryHandle {
     ): Char =
       charVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -8380,9 +8636,10 @@ object MemoryHandle {
     ): Char =
       charVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -8401,9 +8658,10 @@ object MemoryHandle {
     ): Char =
       charVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -8423,9 +8681,10 @@ object MemoryHandle {
     ): Unit =
       charVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -8446,9 +8705,10 @@ object MemoryHandle {
     ): Unit =
       charVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -8469,9 +8729,10 @@ object MemoryHandle {
     ): Unit =
       charVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -8492,9 +8753,10 @@ object MemoryHandle {
     ): Unit =
       charVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -8515,9 +8777,10 @@ object MemoryHandle {
     ): Unit =
       charVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -8538,9 +8801,10 @@ object MemoryHandle {
     ): Unit =
       charVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -8561,9 +8825,10 @@ object MemoryHandle {
     ): Unit =
       charVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -8584,9 +8849,10 @@ object MemoryHandle {
     ): Unit =
       charVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -8608,9 +8874,10 @@ object MemoryHandle {
     ): Boolean =
       charVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8633,9 +8900,10 @@ object MemoryHandle {
     ): Boolean =
       charVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8658,9 +8926,10 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8683,9 +8952,10 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8708,9 +8978,10 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8733,9 +9004,10 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8758,9 +9030,10 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8783,9 +9056,10 @@ object MemoryHandle {
     ): Boolean =
       charVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 1,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8801,56 +9075,56 @@ object MemoryHandle {
     def get[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Int = intVh.get(mem.asJava, (vh.offset0) >> 2)
+    ): Int = intVh.get(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getVolatile[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Int = intVh.getVolatile(mem.asJava, (vh.offset0) >> 2)
+    ): Int = intVh.getVolatile(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getOpaque[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Int = intVh.getOpaque(mem.asJava, (vh.offset0) >> 2)
+    ): Int = intVh.getOpaque(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getAcquire[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Int = intVh.getAcquire(mem.asJava, (vh.offset0) >> 2)
+    ): Int = intVh.getAcquire(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def set[R <: Global](mem: Memory[L, R], value: Int)(
       implicit
       region: Region[R],
-    ): Unit = intVh.set(mem.asJava, (vh.offset0) >> 2, value)
+    ): Unit = intVh.set(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setVolatile[R <: Global](mem: Memory[L, R], value: Int)(
       implicit
       region: Region[R],
-    ): Unit = intVh.setVolatile(mem.asJava, (vh.offset0) >> 2, value)
+    ): Unit = intVh.setVolatile(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setOpaque[R <: Global](mem: Memory[L, R], value: Int)(
       implicit
       region: Region[R],
-    ): Unit = intVh.setOpaque(mem.asJava, (vh.offset0) >> 2, value)
+    ): Unit = intVh.setOpaque(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setRelease[R <: Global](mem: Memory[L, R], value: Int)(
       implicit
       region: Region[R],
-    ): Unit = intVh.setRelease(mem.asJava, (vh.offset0) >> 2, value)
+    ): Unit = intVh.setRelease(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -8862,8 +9136,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Boolean =
-      intVh
-        .compareAndSet(mem.asJava, (vh.offset0) >> 2, expectedValue, newValue)
+      intVh.compareAndSet(mem.asJava, vh.offset0, 0L, expectedValue, newValue)
 
     @IntrinsicCandidate
     @inline
@@ -8877,7 +9150,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0) >> 2,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8894,7 +9168,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0) >> 2,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8911,7 +9186,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0) >> 2,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -8927,16 +9203,16 @@ object MemoryHandle {
     def get[R <: Global](mem: Memory[L, R], x1: Long)(
       implicit
       region: Region[R],
-    ): Int =
-      intVh.get(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2)
+    ): Int = intVh.get(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
     def get[R <: Global](mem: Memory[L, R], x1: Int)(
       implicit
       region: Region[R],
-    ): Int =
-      intVh.get(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2)
+    ): Int = {
+      intVh.get(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
+    }
 
     @IntrinsicCandidate
     @inline
@@ -8944,8 +9220,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Int =
-      intVh
-        .getVolatile(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2)
+      intVh.getVolatile(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -8953,8 +9228,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Int =
-      intVh
-        .getVolatile(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2)
+      intVh.getVolatile(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -8962,8 +9236,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Int =
-      intVh
-        .getOpaque(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2)
+      intVh.getOpaque(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -8971,8 +9244,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Int =
-      intVh
-        .getOpaque(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2)
+      intVh.getOpaque(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -8980,8 +9252,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Int =
-      intVh
-        .getAcquire(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2)
+      intVh.getAcquire(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -8989,8 +9260,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Int =
-      intVh
-        .getAcquire(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2)
+      intVh.getAcquire(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -8998,8 +9268,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Unit =
-      intVh
-        .set(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2, value)
+      intVh.set(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -9007,8 +9276,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Unit =
-      intVh
-        .set(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2, value)
+      intVh.set(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -9018,7 +9286,8 @@ object MemoryHandle {
     ): Unit =
       intVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -9030,7 +9299,8 @@ object MemoryHandle {
     ): Unit =
       intVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -9042,7 +9312,8 @@ object MemoryHandle {
     ): Unit =
       intVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -9054,7 +9325,8 @@ object MemoryHandle {
     ): Unit =
       intVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -9066,7 +9338,8 @@ object MemoryHandle {
     ): Unit =
       intVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -9078,7 +9351,8 @@ object MemoryHandle {
     ): Unit =
       intVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -9095,7 +9369,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9113,7 +9388,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9131,7 +9407,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9149,7 +9426,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9167,7 +9445,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9185,7 +9464,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9203,7 +9483,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9221,7 +9502,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9240,9 +9522,8 @@ object MemoryHandle {
     ): Int =
       intVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -9253,9 +9534,8 @@ object MemoryHandle {
     ): Int =
       intVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -9266,9 +9546,8 @@ object MemoryHandle {
     ): Int =
       intVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -9279,9 +9558,8 @@ object MemoryHandle {
     ): Int =
       intVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -9292,9 +9570,8 @@ object MemoryHandle {
     ): Int =
       intVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -9305,9 +9582,8 @@ object MemoryHandle {
     ): Int =
       intVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -9318,9 +9594,8 @@ object MemoryHandle {
     ): Int =
       intVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -9331,9 +9606,8 @@ object MemoryHandle {
     ): Int =
       intVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -9344,9 +9618,8 @@ object MemoryHandle {
     ): Unit =
       intVh.set(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -9358,9 +9631,8 @@ object MemoryHandle {
     ): Unit =
       intVh.set(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -9377,9 +9649,8 @@ object MemoryHandle {
     ): Unit =
       intVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -9396,9 +9667,8 @@ object MemoryHandle {
     ): Unit =
       intVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -9415,9 +9685,8 @@ object MemoryHandle {
     ): Unit =
       intVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -9429,9 +9698,8 @@ object MemoryHandle {
     ): Unit =
       intVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -9448,9 +9716,8 @@ object MemoryHandle {
     ): Unit =
       intVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -9467,9 +9734,8 @@ object MemoryHandle {
     ): Unit =
       intVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -9487,9 +9753,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9508,9 +9773,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9529,9 +9793,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9550,9 +9813,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9571,9 +9833,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9592,9 +9853,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9613,9 +9873,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9634,9 +9893,8 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9655,8 +9913,9 @@ object MemoryHandle {
     ): Int =
       intVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -9667,8 +9926,9 @@ object MemoryHandle {
     ): Int =
       intVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -9684,8 +9944,9 @@ object MemoryHandle {
     ): Int =
       intVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -9696,8 +9957,9 @@ object MemoryHandle {
     ): Int =
       intVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -9708,8 +9970,9 @@ object MemoryHandle {
     ): Int =
       intVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -9720,8 +9983,9 @@ object MemoryHandle {
     ): Int =
       intVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -9737,8 +10001,9 @@ object MemoryHandle {
     ): Int =
       intVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -9749,8 +10014,9 @@ object MemoryHandle {
     ): Int =
       intVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -9767,8 +10033,9 @@ object MemoryHandle {
     ): Unit =
       intVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -9786,8 +10053,9 @@ object MemoryHandle {
     ): Unit =
       intVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -9805,8 +10073,9 @@ object MemoryHandle {
     ): Unit =
       intVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -9824,8 +10093,9 @@ object MemoryHandle {
     ): Unit =
       intVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -9843,8 +10113,9 @@ object MemoryHandle {
     ): Unit =
       intVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -9862,8 +10133,9 @@ object MemoryHandle {
     ): Unit =
       intVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -9881,8 +10153,9 @@ object MemoryHandle {
     ): Unit =
       intVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -9900,8 +10173,9 @@ object MemoryHandle {
     ): Unit =
       intVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -9920,8 +10194,9 @@ object MemoryHandle {
     ): Boolean =
       intVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9941,8 +10216,9 @@ object MemoryHandle {
     ): Boolean =
       intVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9962,8 +10238,9 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -9983,8 +10260,9 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -10004,8 +10282,9 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -10025,8 +10304,9 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -10046,8 +10326,9 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -10067,8 +10348,9 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -10093,8 +10375,9 @@ object MemoryHandle {
     ): Int =
       intVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -10105,8 +10388,9 @@ object MemoryHandle {
     ): Int =
       intVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -10123,8 +10407,9 @@ object MemoryHandle {
     ): Int =
       intVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -10141,8 +10426,9 @@ object MemoryHandle {
     ): Int =
       intVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -10159,8 +10445,9 @@ object MemoryHandle {
     ): Int =
       intVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -10177,8 +10464,9 @@ object MemoryHandle {
     ): Int =
       intVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -10195,8 +10483,9 @@ object MemoryHandle {
     ): Int =
       intVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -10213,8 +10502,9 @@ object MemoryHandle {
     ): Int =
       intVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -10232,8 +10522,9 @@ object MemoryHandle {
     ): Unit =
       intVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -10252,8 +10543,9 @@ object MemoryHandle {
     ): Unit =
       intVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -10272,8 +10564,9 @@ object MemoryHandle {
     ): Unit =
       intVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -10292,8 +10585,9 @@ object MemoryHandle {
     ): Unit =
       intVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -10312,8 +10606,9 @@ object MemoryHandle {
     ): Unit =
       intVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -10332,8 +10627,9 @@ object MemoryHandle {
     ): Unit =
       intVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -10352,8 +10648,9 @@ object MemoryHandle {
     ): Unit =
       intVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -10372,8 +10669,9 @@ object MemoryHandle {
     ): Unit =
       intVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -10393,8 +10691,9 @@ object MemoryHandle {
     ): Boolean =
       intVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -10415,8 +10714,9 @@ object MemoryHandle {
     ): Boolean =
       intVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -10437,8 +10737,9 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -10459,8 +10760,9 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -10481,8 +10783,9 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -10503,8 +10806,9 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -10525,8 +10829,9 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -10547,8 +10852,9 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -10574,9 +10880,10 @@ object MemoryHandle {
     ): Int =
       intVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -10594,9 +10901,10 @@ object MemoryHandle {
     ): Int =
       intVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -10614,9 +10922,10 @@ object MemoryHandle {
     ): Int =
       intVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -10634,9 +10943,10 @@ object MemoryHandle {
     ): Int =
       intVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -10654,9 +10964,10 @@ object MemoryHandle {
     ): Int =
       intVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -10674,9 +10985,10 @@ object MemoryHandle {
     ): Int =
       intVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -10694,9 +11006,10 @@ object MemoryHandle {
     ): Int =
       intVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -10714,9 +11027,10 @@ object MemoryHandle {
     ): Int =
       intVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -10735,9 +11049,10 @@ object MemoryHandle {
     ): Unit =
       intVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -10757,9 +11072,10 @@ object MemoryHandle {
     ): Unit =
       intVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -10779,9 +11095,10 @@ object MemoryHandle {
     ): Unit =
       intVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -10801,9 +11118,10 @@ object MemoryHandle {
     ): Unit =
       intVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -10823,9 +11141,10 @@ object MemoryHandle {
     ): Unit =
       intVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -10845,9 +11164,10 @@ object MemoryHandle {
     ): Unit =
       intVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -10867,9 +11187,10 @@ object MemoryHandle {
     ): Unit =
       intVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -10889,9 +11210,10 @@ object MemoryHandle {
     ): Unit =
       intVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -10912,9 +11234,10 @@ object MemoryHandle {
     ): Boolean =
       intVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -10936,9 +11259,10 @@ object MemoryHandle {
     ): Boolean =
       intVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -10960,9 +11284,10 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -10984,9 +11309,10 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -11008,9 +11334,10 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -11032,9 +11359,10 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -11056,9 +11384,10 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -11080,9 +11409,10 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -11109,9 +11439,10 @@ object MemoryHandle {
     ): Int =
       intVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -11130,9 +11461,10 @@ object MemoryHandle {
     ): Int =
       intVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -11151,9 +11483,10 @@ object MemoryHandle {
     ): Int =
       intVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -11172,9 +11505,10 @@ object MemoryHandle {
     ): Int =
       intVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -11193,9 +11527,10 @@ object MemoryHandle {
     ): Int =
       intVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -11214,9 +11549,10 @@ object MemoryHandle {
     ): Int =
       intVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -11235,9 +11571,10 @@ object MemoryHandle {
     ): Int =
       intVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -11256,9 +11593,10 @@ object MemoryHandle {
     ): Int =
       intVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -11278,9 +11616,10 @@ object MemoryHandle {
     ): Unit =
       intVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -11301,9 +11640,10 @@ object MemoryHandle {
     ): Unit =
       intVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -11324,9 +11664,10 @@ object MemoryHandle {
     ): Unit =
       intVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -11347,9 +11688,10 @@ object MemoryHandle {
     ): Unit =
       intVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -11370,9 +11712,10 @@ object MemoryHandle {
     ): Unit =
       intVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -11393,9 +11736,10 @@ object MemoryHandle {
     ): Unit =
       intVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -11416,9 +11760,10 @@ object MemoryHandle {
     ): Unit =
       intVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -11439,9 +11784,10 @@ object MemoryHandle {
     ): Unit =
       intVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -11463,9 +11809,10 @@ object MemoryHandle {
     ): Boolean =
       intVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -11488,9 +11835,10 @@ object MemoryHandle {
     ): Boolean =
       intVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -11513,9 +11861,10 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -11538,9 +11887,10 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -11563,9 +11913,10 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -11588,9 +11939,10 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -11613,9 +11965,10 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -11638,9 +11991,10 @@ object MemoryHandle {
     ): Boolean =
       intVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -11656,56 +12010,56 @@ object MemoryHandle {
     def get[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Long = longVh.get(mem.asJava, (vh.offset0) >> 3)
+    ): Long = longVh.get(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getVolatile[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Long = longVh.getVolatile(mem.asJava, (vh.offset0) >> 3)
+    ): Long = longVh.getVolatile(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getOpaque[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Long = longVh.getOpaque(mem.asJava, (vh.offset0) >> 3)
+    ): Long = longVh.getOpaque(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getAcquire[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Long = longVh.getAcquire(mem.asJava, (vh.offset0) >> 3)
+    ): Long = longVh.getAcquire(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def set[R <: Global](mem: Memory[L, R], value: Long)(
       implicit
       region: Region[R],
-    ): Unit = longVh.set(mem.asJava, (vh.offset0) >> 3, value)
+    ): Unit = longVh.set(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setVolatile[R <: Global](mem: Memory[L, R], value: Long)(
       implicit
       region: Region[R],
-    ): Unit = longVh.setVolatile(mem.asJava, (vh.offset0) >> 3, value)
+    ): Unit = longVh.setVolatile(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setOpaque[R <: Global](mem: Memory[L, R], value: Long)(
       implicit
       region: Region[R],
-    ): Unit = longVh.setOpaque(mem.asJava, (vh.offset0) >> 3, value)
+    ): Unit = longVh.setOpaque(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setRelease[R <: Global](mem: Memory[L, R], value: Long)(
       implicit
       region: Region[R],
-    ): Unit = longVh.setRelease(mem.asJava, (vh.offset0) >> 3, value)
+    ): Unit = longVh.setRelease(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -11717,8 +12071,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Boolean =
-      longVh
-        .compareAndSet(mem.asJava, (vh.offset0) >> 3, expectedValue, newValue)
+      longVh.compareAndSet(mem.asJava, vh.offset0, 0L, expectedValue, newValue)
 
     @IntrinsicCandidate
     @inline
@@ -11732,7 +12085,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0) >> 3,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -11749,7 +12103,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0) >> 3,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -11766,7 +12121,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0) >> 3,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -11783,7 +12139,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Long =
-      longVh.get(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3)
+      longVh.get(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -11791,7 +12147,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Long =
-      longVh.get(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3)
+      longVh.get(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -11800,7 +12156,7 @@ object MemoryHandle {
       region: Region[R],
     ): Long =
       longVh
-        .getVolatile(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3)
+        .getVolatile(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -11809,7 +12165,7 @@ object MemoryHandle {
       region: Region[R],
     ): Long =
       longVh
-        .getVolatile(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3)
+        .getVolatile(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -11817,8 +12173,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Long =
-      longVh
-        .getOpaque(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3)
+      longVh.getOpaque(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -11826,8 +12181,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Long =
-      longVh
-        .getOpaque(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3)
+      longVh.getOpaque(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -11835,8 +12189,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Long =
-      longVh
-        .getAcquire(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3)
+      longVh.getAcquire(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -11844,8 +12197,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Long =
-      longVh
-        .getAcquire(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3)
+      longVh.getAcquire(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -11853,8 +12205,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Unit =
-      longVh
-        .set(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3, value)
+      longVh.set(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -11862,8 +12213,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Unit =
-      longVh
-        .set(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3, value)
+      longVh.set(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -11873,7 +12223,8 @@ object MemoryHandle {
     ): Unit =
       longVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -11885,7 +12236,8 @@ object MemoryHandle {
     ): Unit =
       longVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -11897,7 +12249,8 @@ object MemoryHandle {
     ): Unit =
       longVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -11909,7 +12262,8 @@ object MemoryHandle {
     ): Unit =
       longVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -11921,7 +12275,8 @@ object MemoryHandle {
     ): Unit =
       longVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -11933,7 +12288,8 @@ object MemoryHandle {
     ): Unit =
       longVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -11950,7 +12306,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -11968,7 +12325,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -11986,7 +12344,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12004,7 +12363,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12022,7 +12382,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12040,7 +12401,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12058,7 +12420,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12076,7 +12439,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12095,9 +12459,8 @@ object MemoryHandle {
     ): Long =
       longVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -12108,9 +12471,8 @@ object MemoryHandle {
     ): Long =
       longVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -12121,9 +12483,8 @@ object MemoryHandle {
     ): Long =
       longVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -12134,9 +12495,8 @@ object MemoryHandle {
     ): Long =
       longVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -12147,9 +12507,8 @@ object MemoryHandle {
     ): Long =
       longVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -12160,9 +12519,8 @@ object MemoryHandle {
     ): Long =
       longVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -12173,9 +12531,8 @@ object MemoryHandle {
     ): Long =
       longVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -12186,9 +12543,8 @@ object MemoryHandle {
     ): Long =
       longVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -12199,9 +12555,8 @@ object MemoryHandle {
     ): Unit =
       longVh.set(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -12213,9 +12568,8 @@ object MemoryHandle {
     ): Unit =
       longVh.set(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -12232,9 +12586,8 @@ object MemoryHandle {
     ): Unit =
       longVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -12251,9 +12604,8 @@ object MemoryHandle {
     ): Unit =
       longVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -12270,9 +12622,8 @@ object MemoryHandle {
     ): Unit =
       longVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -12289,9 +12640,8 @@ object MemoryHandle {
     ): Unit =
       longVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -12308,9 +12658,8 @@ object MemoryHandle {
     ): Unit =
       longVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -12327,9 +12676,8 @@ object MemoryHandle {
     ): Unit =
       longVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -12347,9 +12695,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12368,9 +12715,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12389,9 +12735,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12410,9 +12755,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12431,9 +12775,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12452,9 +12795,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12473,9 +12815,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12494,9 +12835,8 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12515,8 +12855,9 @@ object MemoryHandle {
     ): Long =
       longVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -12527,8 +12868,9 @@ object MemoryHandle {
     ): Long =
       longVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -12544,8 +12886,9 @@ object MemoryHandle {
     ): Long =
       longVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -12556,8 +12899,9 @@ object MemoryHandle {
     ): Long =
       longVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -12568,8 +12912,9 @@ object MemoryHandle {
     ): Long =
       longVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -12580,8 +12925,9 @@ object MemoryHandle {
     ): Long =
       longVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -12597,8 +12943,9 @@ object MemoryHandle {
     ): Long =
       longVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -12609,8 +12956,9 @@ object MemoryHandle {
     ): Long =
       longVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -12627,8 +12975,9 @@ object MemoryHandle {
     ): Unit =
       longVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -12646,8 +12995,9 @@ object MemoryHandle {
     ): Unit =
       longVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -12665,8 +13015,9 @@ object MemoryHandle {
     ): Unit =
       longVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -12684,8 +13035,9 @@ object MemoryHandle {
     ): Unit =
       longVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -12703,8 +13055,9 @@ object MemoryHandle {
     ): Unit =
       longVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -12722,8 +13075,9 @@ object MemoryHandle {
     ): Unit =
       longVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -12741,8 +13095,9 @@ object MemoryHandle {
     ): Unit =
       longVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -12760,8 +13115,9 @@ object MemoryHandle {
     ): Unit =
       longVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -12780,8 +13136,9 @@ object MemoryHandle {
     ): Boolean =
       longVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12801,8 +13158,9 @@ object MemoryHandle {
     ): Boolean =
       longVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12822,8 +13180,9 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12843,8 +13202,9 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12864,8 +13224,9 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12885,8 +13246,9 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12906,8 +13268,9 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12927,8 +13290,9 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -12953,8 +13317,9 @@ object MemoryHandle {
     ): Long =
       longVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -12965,8 +13330,9 @@ object MemoryHandle {
     ): Long =
       longVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -12983,8 +13349,9 @@ object MemoryHandle {
     ): Long =
       longVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -13001,8 +13368,9 @@ object MemoryHandle {
     ): Long =
       longVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -13019,8 +13387,9 @@ object MemoryHandle {
     ): Long =
       longVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -13037,8 +13406,9 @@ object MemoryHandle {
     ): Long =
       longVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -13055,8 +13425,9 @@ object MemoryHandle {
     ): Long =
       longVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -13073,8 +13444,9 @@ object MemoryHandle {
     ): Long =
       longVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -13092,8 +13464,9 @@ object MemoryHandle {
     ): Unit =
       longVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -13112,8 +13485,9 @@ object MemoryHandle {
     ): Unit =
       longVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -13132,8 +13506,9 @@ object MemoryHandle {
     ): Unit =
       longVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -13152,8 +13527,9 @@ object MemoryHandle {
     ): Unit =
       longVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -13172,8 +13548,9 @@ object MemoryHandle {
     ): Unit =
       longVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -13192,8 +13569,9 @@ object MemoryHandle {
     ): Unit =
       longVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -13212,8 +13590,9 @@ object MemoryHandle {
     ): Unit =
       longVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -13232,8 +13611,9 @@ object MemoryHandle {
     ): Unit =
       longVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -13253,8 +13633,9 @@ object MemoryHandle {
     ): Boolean =
       longVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -13275,8 +13656,9 @@ object MemoryHandle {
     ): Boolean =
       longVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -13297,8 +13679,9 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -13319,8 +13702,9 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -13341,8 +13725,9 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -13363,8 +13748,9 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -13385,8 +13771,9 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -13407,8 +13794,9 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -13434,9 +13822,10 @@ object MemoryHandle {
     ): Long =
       longVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -13454,9 +13843,10 @@ object MemoryHandle {
     ): Long =
       longVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -13474,9 +13864,10 @@ object MemoryHandle {
     ): Long =
       longVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -13494,9 +13885,10 @@ object MemoryHandle {
     ): Long =
       longVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -13514,9 +13906,10 @@ object MemoryHandle {
     ): Long =
       longVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -13534,9 +13927,10 @@ object MemoryHandle {
     ): Long =
       longVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -13554,9 +13948,10 @@ object MemoryHandle {
     ): Long =
       longVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -13574,9 +13969,10 @@ object MemoryHandle {
     ): Long =
       longVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -13595,9 +13991,10 @@ object MemoryHandle {
     ): Unit =
       longVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -13617,9 +14014,10 @@ object MemoryHandle {
     ): Unit =
       longVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -13639,9 +14037,10 @@ object MemoryHandle {
     ): Unit =
       longVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -13661,9 +14060,10 @@ object MemoryHandle {
     ): Unit =
       longVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -13683,9 +14083,10 @@ object MemoryHandle {
     ): Unit =
       longVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -13705,9 +14106,10 @@ object MemoryHandle {
     ): Unit =
       longVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -13727,9 +14129,10 @@ object MemoryHandle {
     ): Unit =
       longVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -13749,9 +14152,10 @@ object MemoryHandle {
     ): Unit =
       longVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -13772,9 +14176,10 @@ object MemoryHandle {
     ): Boolean =
       longVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -13796,9 +14201,10 @@ object MemoryHandle {
     ): Boolean =
       longVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -13820,9 +14226,10 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -13844,9 +14251,10 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -13868,9 +14276,10 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -13892,9 +14301,10 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -13916,9 +14326,10 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -13940,9 +14351,10 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -13969,9 +14381,10 @@ object MemoryHandle {
     ): Long =
       longVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -13990,9 +14403,10 @@ object MemoryHandle {
     ): Long =
       longVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -14011,9 +14425,10 @@ object MemoryHandle {
     ): Long =
       longVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -14032,9 +14447,10 @@ object MemoryHandle {
     ): Long =
       longVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -14053,9 +14469,10 @@ object MemoryHandle {
     ): Long =
       longVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -14074,9 +14491,10 @@ object MemoryHandle {
     ): Long =
       longVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -14095,9 +14513,10 @@ object MemoryHandle {
     ): Long =
       longVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -14116,9 +14535,10 @@ object MemoryHandle {
     ): Long =
       longVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -14138,9 +14558,10 @@ object MemoryHandle {
     ): Unit =
       longVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -14161,9 +14582,10 @@ object MemoryHandle {
     ): Unit =
       longVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -14184,9 +14606,10 @@ object MemoryHandle {
     ): Unit =
       longVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -14207,9 +14630,10 @@ object MemoryHandle {
     ): Unit =
       longVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -14230,9 +14654,10 @@ object MemoryHandle {
     ): Unit =
       longVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -14253,9 +14678,10 @@ object MemoryHandle {
     ): Unit =
       longVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -14276,9 +14702,10 @@ object MemoryHandle {
     ): Unit =
       longVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -14299,9 +14726,10 @@ object MemoryHandle {
     ): Unit =
       longVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -14323,9 +14751,10 @@ object MemoryHandle {
     ): Boolean =
       longVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14348,9 +14777,10 @@ object MemoryHandle {
     ): Boolean =
       longVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14373,9 +14803,10 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14398,9 +14829,10 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14423,9 +14855,10 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14448,9 +14881,10 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14473,9 +14907,10 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14498,9 +14933,10 @@ object MemoryHandle {
     ): Boolean =
       longVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14516,56 +14952,56 @@ object MemoryHandle {
     def get[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Float = floatVh.get(mem.asJava, (vh.offset0) >> 2)
+    ): Float = floatVh.get(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getVolatile[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Float = floatVh.getVolatile(mem.asJava, (vh.offset0) >> 2)
+    ): Float = floatVh.getVolatile(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getOpaque[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Float = floatVh.getOpaque(mem.asJava, (vh.offset0) >> 2)
+    ): Float = floatVh.getOpaque(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getAcquire[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Float = floatVh.getAcquire(mem.asJava, (vh.offset0) >> 2)
+    ): Float = floatVh.getAcquire(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def set[R <: Global](mem: Memory[L, R], value: Float)(
       implicit
       region: Region[R],
-    ): Unit = floatVh.set(mem.asJava, (vh.offset0) >> 2, value)
+    ): Unit = floatVh.set(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setVolatile[R <: Global](mem: Memory[L, R], value: Float)(
       implicit
       region: Region[R],
-    ): Unit = floatVh.setVolatile(mem.asJava, (vh.offset0) >> 2, value)
+    ): Unit = floatVh.setVolatile(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setOpaque[R <: Global](mem: Memory[L, R], value: Float)(
       implicit
       region: Region[R],
-    ): Unit = floatVh.setOpaque(mem.asJava, (vh.offset0) >> 2, value)
+    ): Unit = floatVh.setOpaque(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setRelease[R <: Global](mem: Memory[L, R], value: Float)(
       implicit
       region: Region[R],
-    ): Unit = floatVh.setRelease(mem.asJava, (vh.offset0) >> 2, value)
+    ): Unit = floatVh.setRelease(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -14577,8 +15013,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Boolean =
-      floatVh
-        .compareAndSet(mem.asJava, (vh.offset0) >> 2, expectedValue, newValue)
+      floatVh.compareAndSet(mem.asJava, vh.offset0, 0L, expectedValue, newValue)
 
     @IntrinsicCandidate
     @inline
@@ -14592,7 +15027,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0) >> 2,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14609,7 +15045,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0) >> 2,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14626,7 +15063,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0) >> 2,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14643,7 +15081,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Float =
-      floatVh.get(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2)
+      floatVh.get(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -14651,7 +15089,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Float =
-      floatVh.get(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2)
+      floatVh.get(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -14660,7 +15098,7 @@ object MemoryHandle {
       region: Region[R],
     ): Float =
       floatVh
-        .getVolatile(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2)
+        .getVolatile(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -14669,7 +15107,7 @@ object MemoryHandle {
       region: Region[R],
     ): Float =
       floatVh
-        .getVolatile(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2)
+        .getVolatile(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -14677,8 +15115,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Float =
-      floatVh
-        .getOpaque(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2)
+      floatVh.getOpaque(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -14686,8 +15123,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Float =
-      floatVh
-        .getOpaque(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2)
+      floatVh.getOpaque(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -14696,7 +15132,7 @@ object MemoryHandle {
       region: Region[R],
     ): Float =
       floatVh
-        .getAcquire(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2)
+        .getAcquire(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -14705,7 +15141,7 @@ object MemoryHandle {
       region: Region[R],
     ): Float =
       floatVh
-        .getAcquire(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2)
+        .getAcquire(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -14714,7 +15150,7 @@ object MemoryHandle {
       region: Region[R],
     ): Unit =
       floatVh
-        .set(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2, value)
+        .set(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -14723,7 +15159,7 @@ object MemoryHandle {
       region: Region[R],
     ): Unit =
       floatVh
-        .set(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2, value)
+        .set(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -14733,7 +15169,8 @@ object MemoryHandle {
     ): Unit =
       floatVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -14745,7 +15182,8 @@ object MemoryHandle {
     ): Unit =
       floatVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -14757,7 +15195,8 @@ object MemoryHandle {
     ): Unit =
       floatVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -14769,7 +15208,8 @@ object MemoryHandle {
     ): Unit =
       floatVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -14781,7 +15221,8 @@ object MemoryHandle {
     ): Unit =
       floatVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -14793,7 +15234,8 @@ object MemoryHandle {
     ): Unit =
       floatVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -14810,7 +15252,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14828,7 +15271,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14846,7 +15290,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14864,7 +15309,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14882,7 +15328,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14900,7 +15347,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14918,7 +15366,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14936,7 +15385,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -14955,9 +15405,8 @@ object MemoryHandle {
     ): Float =
       floatVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -14968,9 +15417,8 @@ object MemoryHandle {
     ): Float =
       floatVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -14981,9 +15429,8 @@ object MemoryHandle {
     ): Float =
       floatVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -14994,9 +15441,8 @@ object MemoryHandle {
     ): Float =
       floatVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15007,9 +15453,8 @@ object MemoryHandle {
     ): Float =
       floatVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15020,9 +15465,8 @@ object MemoryHandle {
     ): Float =
       floatVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15033,9 +15477,8 @@ object MemoryHandle {
     ): Float =
       floatVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15046,9 +15489,8 @@ object MemoryHandle {
     ): Float =
       floatVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15059,9 +15501,8 @@ object MemoryHandle {
     ): Unit =
       floatVh.set(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -15073,9 +15514,8 @@ object MemoryHandle {
     ): Unit =
       floatVh.set(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -15092,9 +15532,8 @@ object MemoryHandle {
     ): Unit =
       floatVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -15111,9 +15550,8 @@ object MemoryHandle {
     ): Unit =
       floatVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -15130,9 +15568,8 @@ object MemoryHandle {
     ): Unit =
       floatVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -15149,9 +15586,8 @@ object MemoryHandle {
     ): Unit =
       floatVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -15168,9 +15604,8 @@ object MemoryHandle {
     ): Unit =
       floatVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -15187,9 +15622,8 @@ object MemoryHandle {
     ): Unit =
       floatVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -15207,9 +15641,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -15228,9 +15661,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -15249,9 +15681,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -15270,9 +15701,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -15291,9 +15721,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -15312,9 +15741,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -15333,9 +15761,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -15354,9 +15781,8 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -15375,8 +15801,9 @@ object MemoryHandle {
     ): Float =
       floatVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15387,8 +15814,9 @@ object MemoryHandle {
     ): Float =
       floatVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15404,8 +15832,9 @@ object MemoryHandle {
     ): Float =
       floatVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15416,8 +15845,9 @@ object MemoryHandle {
     ): Float =
       floatVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15428,8 +15858,9 @@ object MemoryHandle {
     ): Float =
       floatVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15440,8 +15871,9 @@ object MemoryHandle {
     ): Float =
       floatVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15457,8 +15889,9 @@ object MemoryHandle {
     ): Float =
       floatVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15469,8 +15902,9 @@ object MemoryHandle {
     ): Float =
       floatVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15487,8 +15921,9 @@ object MemoryHandle {
     ): Unit =
       floatVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -15506,8 +15941,9 @@ object MemoryHandle {
     ): Unit =
       floatVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -15525,8 +15961,9 @@ object MemoryHandle {
     ): Unit =
       floatVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -15544,8 +15981,9 @@ object MemoryHandle {
     ): Unit =
       floatVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -15563,8 +16001,9 @@ object MemoryHandle {
     ): Unit =
       floatVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -15582,8 +16021,9 @@ object MemoryHandle {
     ): Unit =
       floatVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -15601,8 +16041,9 @@ object MemoryHandle {
     ): Unit =
       floatVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -15620,8 +16061,9 @@ object MemoryHandle {
     ): Unit =
       floatVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -15640,8 +16082,9 @@ object MemoryHandle {
     ): Boolean =
       floatVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -15661,8 +16104,9 @@ object MemoryHandle {
     ): Boolean =
       floatVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -15682,8 +16126,9 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -15703,8 +16148,9 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -15724,8 +16170,9 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -15745,8 +16192,9 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -15766,8 +16214,9 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -15787,8 +16236,9 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -15813,8 +16263,9 @@ object MemoryHandle {
     ): Float =
       floatVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15825,8 +16276,9 @@ object MemoryHandle {
     ): Float =
       floatVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15843,8 +16295,9 @@ object MemoryHandle {
     ): Float =
       floatVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15861,8 +16314,9 @@ object MemoryHandle {
     ): Float =
       floatVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15879,8 +16333,9 @@ object MemoryHandle {
     ): Float =
       floatVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15897,8 +16352,9 @@ object MemoryHandle {
     ): Float =
       floatVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15915,8 +16371,9 @@ object MemoryHandle {
     ): Float =
       floatVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15933,8 +16390,9 @@ object MemoryHandle {
     ): Float =
       floatVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -15952,8 +16410,9 @@ object MemoryHandle {
     ): Unit =
       floatVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -15972,8 +16431,9 @@ object MemoryHandle {
     ): Unit =
       floatVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -15992,8 +16452,9 @@ object MemoryHandle {
     ): Unit =
       floatVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -16012,8 +16473,9 @@ object MemoryHandle {
     ): Unit =
       floatVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -16032,8 +16494,9 @@ object MemoryHandle {
     ): Unit =
       floatVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -16052,8 +16515,9 @@ object MemoryHandle {
     ): Unit =
       floatVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -16072,8 +16536,9 @@ object MemoryHandle {
     ): Unit =
       floatVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -16092,8 +16557,9 @@ object MemoryHandle {
     ): Unit =
       floatVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -16113,8 +16579,9 @@ object MemoryHandle {
     ): Boolean =
       floatVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -16135,8 +16602,9 @@ object MemoryHandle {
     ): Boolean =
       floatVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -16157,8 +16625,9 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -16179,8 +16648,9 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -16201,8 +16671,9 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -16223,8 +16694,9 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -16245,8 +16717,9 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -16267,8 +16740,9 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 2,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -16294,9 +16768,10 @@ object MemoryHandle {
     ): Float =
       floatVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -16314,9 +16789,10 @@ object MemoryHandle {
     ): Float =
       floatVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -16334,9 +16810,10 @@ object MemoryHandle {
     ): Float =
       floatVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -16354,9 +16831,10 @@ object MemoryHandle {
     ): Float =
       floatVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -16374,9 +16852,10 @@ object MemoryHandle {
     ): Float =
       floatVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -16394,9 +16873,10 @@ object MemoryHandle {
     ): Float =
       floatVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -16414,9 +16894,10 @@ object MemoryHandle {
     ): Float =
       floatVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -16434,9 +16915,10 @@ object MemoryHandle {
     ): Float =
       floatVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -16455,9 +16937,10 @@ object MemoryHandle {
     ): Unit =
       floatVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -16477,9 +16960,10 @@ object MemoryHandle {
     ): Unit =
       floatVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -16499,9 +16983,10 @@ object MemoryHandle {
     ): Unit =
       floatVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -16521,9 +17006,10 @@ object MemoryHandle {
     ): Unit =
       floatVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -16543,9 +17029,10 @@ object MemoryHandle {
     ): Unit =
       floatVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -16565,9 +17052,10 @@ object MemoryHandle {
     ): Unit =
       floatVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -16587,9 +17075,10 @@ object MemoryHandle {
     ): Unit =
       floatVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -16609,9 +17098,10 @@ object MemoryHandle {
     ): Unit =
       floatVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -16632,9 +17122,10 @@ object MemoryHandle {
     ): Boolean =
       floatVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -16656,9 +17147,10 @@ object MemoryHandle {
     ): Boolean =
       floatVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -16680,9 +17172,10 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -16704,9 +17197,10 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -16728,9 +17222,10 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -16752,9 +17247,10 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -16776,9 +17272,10 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -16800,9 +17297,10 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 2,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -16829,9 +17327,10 @@ object MemoryHandle {
     ): Float =
       floatVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -16850,9 +17349,10 @@ object MemoryHandle {
     ): Float =
       floatVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -16871,9 +17371,10 @@ object MemoryHandle {
     ): Float =
       floatVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -16892,9 +17393,10 @@ object MemoryHandle {
     ): Float =
       floatVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -16913,9 +17415,10 @@ object MemoryHandle {
     ): Float =
       floatVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -16934,9 +17437,10 @@ object MemoryHandle {
     ): Float =
       floatVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -16955,9 +17459,10 @@ object MemoryHandle {
     ): Float =
       floatVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -16976,9 +17481,10 @@ object MemoryHandle {
     ): Float =
       floatVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -16998,9 +17504,10 @@ object MemoryHandle {
     ): Unit =
       floatVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -17021,9 +17528,10 @@ object MemoryHandle {
     ): Unit =
       floatVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -17044,9 +17552,10 @@ object MemoryHandle {
     ): Unit =
       floatVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -17067,9 +17576,10 @@ object MemoryHandle {
     ): Unit =
       floatVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -17090,9 +17600,10 @@ object MemoryHandle {
     ): Unit =
       floatVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -17113,9 +17624,10 @@ object MemoryHandle {
     ): Unit =
       floatVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -17136,9 +17648,10 @@ object MemoryHandle {
     ): Unit =
       floatVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -17159,9 +17672,10 @@ object MemoryHandle {
     ): Unit =
       floatVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -17183,9 +17697,10 @@ object MemoryHandle {
     ): Boolean =
       floatVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17208,9 +17723,10 @@ object MemoryHandle {
     ): Boolean =
       floatVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17233,9 +17749,10 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17258,9 +17775,10 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17283,9 +17801,10 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17308,9 +17827,10 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17333,9 +17853,10 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17358,9 +17879,10 @@ object MemoryHandle {
     ): Boolean =
       floatVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 2,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17376,56 +17898,56 @@ object MemoryHandle {
     def get[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Double = doubleVh.get(mem.asJava, (vh.offset0) >> 3)
+    ): Double = doubleVh.get(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getVolatile[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Double = doubleVh.getVolatile(mem.asJava, (vh.offset0) >> 3)
+    ): Double = doubleVh.getVolatile(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getOpaque[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Double = doubleVh.getOpaque(mem.asJava, (vh.offset0) >> 3)
+    ): Double = doubleVh.getOpaque(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def getAcquire[R <: Global](mem: Memory[L, R])(
       implicit
       region: Region[R],
-    ): Double = doubleVh.getAcquire(mem.asJava, (vh.offset0) >> 3)
+    ): Double = doubleVh.getAcquire(mem.asJava, vh.offset0, 0L)
 
     @IntrinsicCandidate
     @inline
     def set[R <: Global](mem: Memory[L, R], value: Double)(
       implicit
       region: Region[R],
-    ): Unit = doubleVh.set(mem.asJava, (vh.offset0) >> 3, value)
+    ): Unit = doubleVh.set(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setVolatile[R <: Global](mem: Memory[L, R], value: Double)(
       implicit
       region: Region[R],
-    ): Unit = doubleVh.setVolatile(mem.asJava, (vh.offset0) >> 3, value)
+    ): Unit = doubleVh.setVolatile(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setOpaque[R <: Global](mem: Memory[L, R], value: Double)(
       implicit
       region: Region[R],
-    ): Unit = doubleVh.setOpaque(mem.asJava, (vh.offset0) >> 3, value)
+    ): Unit = doubleVh.setOpaque(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
     def setRelease[R <: Global](mem: Memory[L, R], value: Double)(
       implicit
       region: Region[R],
-    ): Unit = doubleVh.setRelease(mem.asJava, (vh.offset0) >> 3, value)
+    ): Unit = doubleVh.setRelease(mem.asJava, vh.offset0, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -17438,7 +17960,7 @@ object MemoryHandle {
       region: Region[R],
     ): Boolean =
       doubleVh
-        .compareAndSet(mem.asJava, (vh.offset0) >> 3, expectedValue, newValue)
+        .compareAndSet(mem.asJava, vh.offset0, 0L, expectedValue, newValue)
 
     @IntrinsicCandidate
     @inline
@@ -17452,7 +17974,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0) >> 3,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17469,7 +17992,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0) >> 3,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17486,7 +18010,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0) >> 3,
+        vh.offset0,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17503,7 +18028,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Double =
-      doubleVh.get(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3)
+      doubleVh.get(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -17511,7 +18036,7 @@ object MemoryHandle {
       implicit
       region: Region[R],
     ): Double =
-      doubleVh.get(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3)
+      doubleVh.get(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -17520,7 +18045,7 @@ object MemoryHandle {
       region: Region[R],
     ): Double =
       doubleVh
-        .getVolatile(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3)
+        .getVolatile(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -17529,7 +18054,7 @@ object MemoryHandle {
       region: Region[R],
     ): Double =
       doubleVh
-        .getVolatile(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3)
+        .getVolatile(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -17538,7 +18063,7 @@ object MemoryHandle {
       region: Region[R],
     ): Double =
       doubleVh
-        .getOpaque(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3)
+        .getOpaque(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -17547,7 +18072,7 @@ object MemoryHandle {
       region: Region[R],
     ): Double =
       doubleVh
-        .getOpaque(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3)
+        .getOpaque(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -17556,7 +18081,7 @@ object MemoryHandle {
       region: Region[R],
     ): Double =
       doubleVh
-        .getAcquire(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3)
+        .getAcquire(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -17565,7 +18090,7 @@ object MemoryHandle {
       region: Region[R],
     ): Double =
       doubleVh
-        .getAcquire(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3)
+        .getAcquire(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L)
 
     @IntrinsicCandidate
     @inline
@@ -17574,7 +18099,7 @@ object MemoryHandle {
       region: Region[R],
     ): Unit =
       doubleVh
-        .set(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3, value)
+        .set(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -17583,7 +18108,7 @@ object MemoryHandle {
       region: Region[R],
     ): Unit =
       doubleVh
-        .set(mem.asJava, (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3, value)
+        .set(mem.asJava, vh.offset0 + vh.step1 * x1 + vh.offset1, 0L, value)
 
     @IntrinsicCandidate
     @inline
@@ -17593,7 +18118,8 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -17605,7 +18131,8 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -17617,7 +18144,8 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -17629,7 +18157,8 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -17641,7 +18170,8 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -17653,7 +18183,8 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         value,
       )
 
@@ -17670,7 +18201,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17688,7 +18220,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17706,7 +18239,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17724,7 +18258,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17742,7 +18277,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17760,7 +18296,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17778,7 +18315,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17796,7 +18334,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1,
+        0L,
         expectedValue,
         newValue,
       )
@@ -17815,9 +18354,8 @@ object MemoryHandle {
     ): Double =
       doubleVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -17828,9 +18366,8 @@ object MemoryHandle {
     ): Double =
       doubleVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -17841,9 +18378,8 @@ object MemoryHandle {
     ): Double =
       doubleVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -17854,9 +18390,8 @@ object MemoryHandle {
     ): Double =
       doubleVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -17867,9 +18402,8 @@ object MemoryHandle {
     ): Double =
       doubleVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -17880,9 +18414,8 @@ object MemoryHandle {
     ): Double =
       doubleVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -17893,9 +18426,8 @@ object MemoryHandle {
     ): Double =
       doubleVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -17906,9 +18438,8 @@ object MemoryHandle {
     ): Double =
       doubleVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh
-          .offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -17919,9 +18450,8 @@ object MemoryHandle {
     ): Unit =
       doubleVh.set(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -17933,9 +18463,8 @@ object MemoryHandle {
     ): Unit =
       doubleVh.set(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -17952,9 +18481,8 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -17971,9 +18499,8 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -17990,9 +18517,8 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -18009,9 +18535,8 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -18028,9 +18553,8 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -18047,9 +18571,8 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh
-          .step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         value,
       )
 
@@ -18067,9 +18590,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -18088,9 +18610,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -18109,9 +18630,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -18130,9 +18650,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -18151,9 +18670,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -18172,9 +18690,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -18193,9 +18710,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -18214,9 +18730,8 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh
-          .offset1 + vh.step2 * x2 + vh.offset2) >>
-          3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2,
+        0L,
         expectedValue,
         newValue,
       )
@@ -18235,8 +18750,9 @@ object MemoryHandle {
     ): Double =
       doubleVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -18247,8 +18763,9 @@ object MemoryHandle {
     ): Double =
       doubleVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -18264,8 +18781,9 @@ object MemoryHandle {
     ): Double =
       doubleVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -18276,8 +18794,9 @@ object MemoryHandle {
     ): Double =
       doubleVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -18288,8 +18807,9 @@ object MemoryHandle {
     ): Double =
       doubleVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -18300,8 +18820,9 @@ object MemoryHandle {
     ): Double =
       doubleVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -18317,8 +18838,9 @@ object MemoryHandle {
     ): Double =
       doubleVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -18329,8 +18851,9 @@ object MemoryHandle {
     ): Double =
       doubleVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -18347,8 +18870,9 @@ object MemoryHandle {
     ): Unit =
       doubleVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -18366,8 +18890,9 @@ object MemoryHandle {
     ): Unit =
       doubleVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -18385,8 +18910,9 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -18404,8 +18930,9 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -18423,8 +18950,9 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -18442,8 +18970,9 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -18461,8 +18990,9 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -18480,8 +19010,9 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         value,
       )
 
@@ -18500,8 +19031,9 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -18521,8 +19053,9 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -18542,8 +19075,9 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -18563,8 +19097,9 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -18584,8 +19119,9 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -18605,8 +19141,9 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -18626,8 +19163,9 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -18647,8 +19185,9 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3,
+        0L,
         expectedValue,
         newValue,
       )
@@ -18673,8 +19212,9 @@ object MemoryHandle {
     ): Double =
       doubleVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -18685,8 +19225,9 @@ object MemoryHandle {
     ): Double =
       doubleVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -18703,8 +19244,9 @@ object MemoryHandle {
     ): Double =
       doubleVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -18721,8 +19263,9 @@ object MemoryHandle {
     ): Double =
       doubleVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -18739,8 +19282,9 @@ object MemoryHandle {
     ): Double =
       doubleVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -18757,8 +19301,9 @@ object MemoryHandle {
     ): Double =
       doubleVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -18775,8 +19320,9 @@ object MemoryHandle {
     ): Double =
       doubleVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -18793,8 +19339,9 @@ object MemoryHandle {
     ): Double =
       doubleVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -18812,8 +19359,9 @@ object MemoryHandle {
     ): Unit =
       doubleVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -18832,8 +19380,9 @@ object MemoryHandle {
     ): Unit =
       doubleVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -18852,8 +19401,9 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -18872,8 +19422,9 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -18892,8 +19443,9 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -18912,8 +19464,9 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -18932,8 +19485,9 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -18952,8 +19506,9 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         value,
       )
 
@@ -18973,8 +19528,9 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -18995,8 +19551,9 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -19017,8 +19574,9 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -19039,8 +19597,9 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -19061,8 +19620,9 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -19083,8 +19643,9 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -19105,8 +19666,9 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -19127,8 +19689,9 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
-          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4) >> 3,
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+          vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4,
+        0L,
         expectedValue,
         newValue,
       )
@@ -19154,9 +19717,10 @@ object MemoryHandle {
     ): Double =
       doubleVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -19174,9 +19738,10 @@ object MemoryHandle {
     ): Double =
       doubleVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -19194,9 +19759,10 @@ object MemoryHandle {
     ): Double =
       doubleVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -19214,9 +19780,10 @@ object MemoryHandle {
     ): Double =
       doubleVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -19234,9 +19801,10 @@ object MemoryHandle {
     ): Double =
       doubleVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -19254,9 +19822,10 @@ object MemoryHandle {
     ): Double =
       doubleVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -19274,9 +19843,10 @@ object MemoryHandle {
     ): Double =
       doubleVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -19294,9 +19864,10 @@ object MemoryHandle {
     ): Double =
       doubleVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -19315,9 +19886,10 @@ object MemoryHandle {
     ): Unit =
       doubleVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -19337,9 +19909,10 @@ object MemoryHandle {
     ): Unit =
       doubleVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -19359,9 +19932,10 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -19381,9 +19955,10 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -19403,9 +19978,10 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -19425,9 +20001,10 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -19447,9 +20024,10 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -19469,9 +20047,10 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         value,
       )
 
@@ -19492,9 +20071,10 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -19516,9 +20096,10 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -19540,9 +20121,10 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -19564,9 +20146,10 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -19588,9 +20171,10 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -19612,9 +20196,10 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -19636,9 +20221,10 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -19660,9 +20246,10 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5) >> 3,
+          vh.step5 * x5 + vh.offset5,
+        0L,
         expectedValue,
         newValue,
       )
@@ -19689,9 +20276,10 @@ object MemoryHandle {
     ): Double =
       doubleVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -19710,9 +20298,10 @@ object MemoryHandle {
     ): Double =
       doubleVh.get(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -19731,9 +20320,10 @@ object MemoryHandle {
     ): Double =
       doubleVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -19752,9 +20342,10 @@ object MemoryHandle {
     ): Double =
       doubleVh.getVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -19773,9 +20364,10 @@ object MemoryHandle {
     ): Double =
       doubleVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -19794,9 +20386,10 @@ object MemoryHandle {
     ): Double =
       doubleVh.getOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -19815,9 +20408,10 @@ object MemoryHandle {
     ): Double =
       doubleVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -19836,9 +20430,10 @@ object MemoryHandle {
     ): Double =
       doubleVh.getAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
       )
 
     @IntrinsicCandidate
@@ -19858,9 +20453,10 @@ object MemoryHandle {
     ): Unit =
       doubleVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -19881,9 +20477,10 @@ object MemoryHandle {
     ): Unit =
       doubleVh.set(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -19904,9 +20501,10 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -19927,9 +20525,10 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setVolatile(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -19950,9 +20549,10 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -19973,9 +20573,10 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setOpaque(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -19996,9 +20597,10 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -20019,9 +20621,10 @@ object MemoryHandle {
     ): Unit =
       doubleVh.setRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         value,
       )
 
@@ -20043,9 +20646,10 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -20068,9 +20672,10 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.compareAndSet(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -20093,9 +20698,10 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -20118,9 +20724,10 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetPlain(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -20143,9 +20750,10 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -20168,9 +20776,10 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetAcquire(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -20193,9 +20802,10 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )
@@ -20218,9 +20828,10 @@ object MemoryHandle {
     ): Boolean =
       doubleVh.weakCompareAndSetRelease(
         mem.asJava,
-        (vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
+        vh.offset0 + vh.step1 * x1 + vh.offset1 + vh.step2 * x2 + vh.offset2 +
           vh.step3 * x3 + vh.offset3 + vh.step4 * x4 + vh.offset4 +
-          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6) >> 3,
+          vh.step5 * x5 + vh.offset5 + vh.step6 * x6 + vh.offset6,
+        0L,
         expectedValue,
         newValue,
       )

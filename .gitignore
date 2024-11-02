@@ -30,6 +30,7 @@ cod
 # Mill specific
 out
 .bsp
+.scala-build
 
 
 
